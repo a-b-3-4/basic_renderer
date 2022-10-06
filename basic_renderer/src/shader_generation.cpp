@@ -1,8 +1,9 @@
-#include "shader_generation.h"
 #include <gl/glew.h>
 #include <iostream>
 #include <fstream>
 #include <string>
+
+#include "shader_generation.h"
 
 std::string parse_shader(const std::string& shader_filepath)
 {
