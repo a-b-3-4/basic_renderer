@@ -40,9 +40,9 @@ unsigned int Shader::compile_shader(unsigned int type, const std::string& source
         glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length);
         char* message = (char*)alloca(length * sizeof(char));
         glGetShaderInfoLog(id, length, &length, message);
-        //TODO: change to log (start)
-        std::cout << "ERROR: failed to compile " << (type == GL_VERTEX_SHADER ? "vertex" : "fragment") << " shader:\n" << message << "\n";
-        //TODO: change to log (end)
+        std::string message_string = message;
+        message_string.pop_back();
+        ERROR << "failed to compile " << (type == GL_VERTEX_SHADER ? "vertex" : "fragment") << " shader:\n" << message_string;
         glDeleteShader(id);
         return 0;
     }
@@ -80,6 +80,14 @@ void Shader::unbind() const
 }
 
 //set uniforms
+void Shader::set_uniform_1i(const std::string& name, int value)
+{
+    glUniform1i(get_uniform_location(name), value);
+}
+void Shader::set_uniform_1f(const std::string& name, float value)
+{
+    glUniform1f(get_uniform_location(name), value);
+}
 void Shader::set_uniform_4f(const std::string& name, float v0, float v1, float v2, float v3)
 {
     glUniform4f(get_uniform_location(name), v0, v1, v2, v3);

@@ -10,6 +10,7 @@
 #include "index_buffer.h"
 #include "vertex_array.h"
 #include "renderer.h"
+#include "texture.h"
 
 int main(void)
 {
@@ -31,21 +32,25 @@ int main(void)
     INFO << "OpenGL version: " << glGetString(GL_VERSION);
     float positions[] = 
     {
-        -1.0f, -1.0f,
-         0.5f, -0.5f,
-         1.0f,  1.0f,
-        -0.5f,  0.5f
+        -1.0f,  1.0f, 0.0f, 1.0f,
+         1.0f,  1.0f, 1.0f, 1.0f,
+        -1.0f,  0.0f, 0.0f, 0.0f,
+         1.0f,  0.0f, 1.0f, 0.0f
     };
     unsigned int indecies[6] =
     {
         0, 1, 2,
-        2, 3, 0
+        1, 2, 3
     };
 
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
     Vertex_array vertex_array;
-    Vertex_buffer vertex_buffer(positions, 2*4*sizeof(float));
+    Vertex_buffer vertex_buffer(positions, 4 * 4 * sizeof(float));
 
     Vertex_buffer_layout vertex_buffer_layout;
+    vertex_buffer_layout.push<float>(2);
     vertex_buffer_layout.push<float>(2);
     vertex_array.add_buffer(vertex_buffer, vertex_buffer_layout);
     
@@ -55,14 +60,18 @@ int main(void)
     shader.bind();
     shader.set_uniform_4f("u_color", 0.5f, 0.0f, 1.0f, 1.0f);
 
+    Texture texture("../basic_renderer/res/textures/florian.png");
+    texture.bind();
+    shader.set_uniform_1i("u_texture", 0);
+
     Renderer renderer;
     float r = 0.5f;
     float increment = 0.01f;
     while (!glfwWindowShouldClose(window))
     {
         renderer.clear();
-        shader.bind();                                          //the odd one out!
-        shader.set_uniform_4f("u_color", r, 0.0f, 1.0f, 1.0f);  //the odd one out!
+        shader.bind();
+        shader.set_uniform_4f("u_color", r, 0.0f, 1.0f, 1.0f);
         renderer.draw(vertex_array, index_buffer, shader);
         
         if(r > 0.7f)
@@ -74,6 +83,7 @@ int main(void)
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
+    texture.~Texture();
     shader.~Shader();
     index_buffer.~Index_buffer();
     vertex_buffer.~Vertex_buffer();

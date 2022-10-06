@@ -15,6 +15,7 @@ opengl = cpp.find_library('OpenGL32', dirs : libdir)
 # include directories
 include_directory = include_directories(
     'basic_renderer/include',
+    'basic_renderer/vendor',
     'dependencies/GLFW/include',
     'dependencies/GLEW/include'
 )
