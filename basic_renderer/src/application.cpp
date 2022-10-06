@@ -4,10 +4,11 @@
 #include <gl/glew.h>
 #include <iostream>
 
+#include "log.h"
 #include "shader_generation.h"
 #include "vertex_buffer.h"
 #include "index_buffer.h"
-#include "log.h"
+#include "vertex_array.h"
 
 int main(void)
 {
@@ -29,9 +30,9 @@ int main(void)
     INFO << "OpenGL version: " << glGetString(GL_VERSION);
     float positions[] = 
     {
-        -0.5f, -1.0f,
+        -1.0f, -1.0f,
          0.5f, -0.5f,
-         0.5f,  1.0f,
+         1.0f,  1.0f,
         -0.5f,  0.5f
     };
     unsigned int indecies[6] =
@@ -39,15 +40,14 @@ int main(void)
         0, 1, 2,
         2, 3, 0
     };
-    unsigned int vao;
-    glGenVertexArrays(1, &vao);
-    glBindVertexArray(vao);
 
+    Vertex_array vertex_array;
     Vertex_buffer vertex_buffer(positions, 2*4*sizeof(float));
 
-    glEnableVertexAttribArray(0); 
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2*sizeof(float), 0);
-
+    Vertex_buffer_layout vertex_buffer_layout;
+    vertex_buffer_layout.push<float>(2);
+    vertex_array.add_buffer(vertex_buffer, vertex_buffer_layout);
+    
     Index_buffer index_buffer(indecies, 6);
 
     unsigned int shader = create_shader("../basic_renderer/shader/shader.vert", "../basic_renderer/shader/shader.frag");
@@ -68,7 +68,7 @@ int main(void)
 
         glUseProgram(shader);
         glUniform4f(u_color, r, 0.0f, 1.0f, 1.0f);
-        glBindVertexArray(vao);
+        vertex_array.bind();
         index_buffer.bind();
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
         

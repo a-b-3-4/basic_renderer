@@ -19,11 +19,11 @@ logger::logger(LOG_TYPE log_type, const char* file, const char* function, int li
 
     switch (log_type)
     {
-        case MM_LOG_TYPE_INFO: format = "\e[38;42mINFO :: "; break;
-        case MM_LOG_TYPE_FATAL: format = "\e[48;5;196;1mFATAL :: "; break;
-        case MM_LOG_TYPE_WARNING: format = "\e[38;5;220mWARNING :: "; break;
-        case MM_LOG_TYPE_TRACE: format = "\e[38;5;240mTRACE :: "; break;
-        case MM_LOG_TYPE_ERROR: format = "\e[38;5;196;1mERROR :: "; break;
+        case LOG_TYPE_INFO: format = "\e[38;42mINFO :: "; break;
+        case LOG_TYPE_FATAL: format = "\e[48;5;196;1mFATAL :: "; break;
+        case LOG_TYPE_WARNING: format = "\e[38;5;220mWARNING :: "; break;
+        case LOG_TYPE_TRACE: format = "\e[38;5;240mTRACE :: "; break;
+        case LOG_TYPE_ERROR: format = "\e[38;5;196;1mERROR :: "; break;
     }
 #endif
 
