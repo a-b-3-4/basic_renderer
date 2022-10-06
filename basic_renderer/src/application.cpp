@@ -7,6 +7,7 @@
 #include "shader_generation.h"
 #include "vertex_buffer.h"
 #include "index_buffer.h"
+#include "log.h"
 
 int main(void)
 {
@@ -23,9 +24,9 @@ int main(void)
     glfwSwapInterval(1);
     if(glewInit() != GLEW_OK)
     {
-        std::cout << "ERROR: glew didn't initionalize\n"; //TODO: change to log
+        WARNING << "glew didn't initionalize";
     }
-    std::cout << "INFO: OpenGL version: " << glGetString(GL_VERSION) << "\n"; //TODO: change to log
+    INFO << "OpenGL version: " << glGetString(GL_VERSION);
     float positions[] = 
     {
         -0.5f, -1.0f,
@@ -55,7 +56,7 @@ int main(void)
     int u_color = glGetUniformLocation(shader, "u_color");
     if(u_color == -1)
     {
-        std::cout << "Warning: uniform \"u_color\" not used!\n"; //TODO: change to log
+        WARNING << "uniform \"u_color\" not used!";
     }
 
     float r = 1.0f;

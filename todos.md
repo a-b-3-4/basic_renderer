@@ -1,3 +1,3 @@
 ### TODO
  - remove warnings
- - logger
+ - abstract EVERYTHING
