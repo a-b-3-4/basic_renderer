@@ -9,6 +9,7 @@
 #include "vertex_buffer.h"
 #include "index_buffer.h"
 #include "vertex_array.h"
+#include "renderer.h"
 
 int main(void)
 {
@@ -54,25 +55,21 @@ int main(void)
     shader.bind();
     shader.set_uniform_4f("u_color", 0.5f, 0.0f, 1.0f, 1.0f);
 
+    Renderer renderer;
     float r = 0.5f;
     float increment = 0.01f;
     while (!glfwWindowShouldClose(window))
     {
-        glClear(GL_COLOR_BUFFER_BIT);
-
-
-        shader.bind();
-        shader.set_uniform_4f("u_color", r, 0.0f, 1.0f, 1.0f);
-        vertex_array.bind();
-        index_buffer.bind();
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+        renderer.clear();
+        shader.bind();                                          //the odd one out!
+        shader.set_uniform_4f("u_color", r, 0.0f, 1.0f, 1.0f);  //the odd one out!
+        renderer.draw(vertex_array, index_buffer, shader);
         
         if(r > 0.7f)
             increment = -0.01f;
         else if(r < 0.5f)
             increment = 0.01f;
         r += increment;
-
 
         glfwSwapBuffers(window);
         glfwPollEvents();
