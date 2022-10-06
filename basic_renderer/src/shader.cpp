@@ -3,9 +3,21 @@
 #include <fstream>
 #include <string>
 
-#include "shader_generation.h"
+#include "shader.h"
+#include "log.h"
 
-std::string parse_shader(const std::string& shader_filepath)
+Shader::Shader(const std::string& vertex_shader_filepath, const std::string& fragment_shader_filepath)
+{
+    m_renderer_id = create_shader(vertex_shader_filepath, fragment_shader_filepath);
+}
+
+Shader::~Shader()
+{
+    glDeleteProgram(m_renderer_id);
+}
+
+
+std::string Shader::parse_shader(const std::string& shader_filepath)
 {
     std::ifstream stream(shader_filepath);
     std::string shader((std::istreambuf_iterator<char>(stream)),
@@ -13,7 +25,7 @@ std::string parse_shader(const std::string& shader_filepath)
     return shader;
 }
 
-unsigned int compile_shader(unsigned int type, const std::string& source)
+unsigned int Shader::compile_shader(unsigned int type, const std::string& source)
 {
     unsigned int id = glCreateShader(type);
     const char* src = source.c_str();
@@ -37,7 +49,7 @@ unsigned int compile_shader(unsigned int type, const std::string& source)
     return id;
 }
 
-unsigned int create_shader(const std::string& vertex_shader_filepath, const std::string& fragment_shader_filepath)
+unsigned int Shader::create_shader(const std::string& vertex_shader_filepath, const std::string& fragment_shader_filepath)
 {
     std::string vertex_shader = parse_shader(vertex_shader_filepath);
     std::string fragment_shader = parse_shader(fragment_shader_filepath);
@@ -55,4 +67,31 @@ unsigned int create_shader(const std::string& vertex_shader_filepath, const std:
     glDeleteShader(fs);
 
     return program;
+}
+
+void Shader::bind() const
+{
+    glUseProgram(m_renderer_id);
+}
+
+void Shader::unbind() const
+{
+    glUseProgram(0);
+}
+
+//set uniforms
+void Shader::set_uniform_4f(const std::string& name, float v0, float v1, float v2, float v3)
+{
+    glUniform4f(get_uniform_location(name), v0, v1, v2, v3);
+}
+
+int Shader::get_uniform_location(const std::string& name)
+{
+    if(m_uniform_location_cache.find(name) != m_uniform_location_cache.end())
+        return m_uniform_location_cache[name];
+    int location = glGetUniformLocation(m_renderer_id, name.c_str());
+    if(location == -1)
+        WARNING << "uniform \"" << name << "\" doesn't exist!";
+    m_uniform_location_cache[name] = location;
+    return location;
 }

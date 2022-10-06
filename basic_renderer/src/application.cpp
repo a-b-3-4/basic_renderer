@@ -5,7 +5,7 @@
 #include <iostream>
 
 #include "log.h"
-#include "shader_generation.h"
+#include "shader.h"
 #include "vertex_buffer.h"
 #include "index_buffer.h"
 #include "vertex_array.h"
@@ -50,29 +50,24 @@ int main(void)
     
     Index_buffer index_buffer(indecies, 6);
 
-    unsigned int shader = create_shader("../basic_renderer/shader/shader.vert", "../basic_renderer/shader/shader.frag");
-    glUseProgram(shader);
+    Shader shader("../basic_renderer/shader/shader.vert", "../basic_renderer/shader/shader.frag");
+    shader.bind();
+    shader.set_uniform_4f("u_color", 0.5f, 0.0f, 1.0f, 1.0f);
 
-    int u_color = glGetUniformLocation(shader, "u_color");
-    if(u_color == -1)
-    {
-        WARNING << "uniform \"u_color\" not used!";
-    }
-
-    float r = 1.0f;
+    float r = 0.5f;
     float increment = 0.01f;
     while (!glfwWindowShouldClose(window))
     {
         glClear(GL_COLOR_BUFFER_BIT);
 
 
-        glUseProgram(shader);
-        glUniform4f(u_color, r, 0.0f, 1.0f, 1.0f);
+        shader.bind();
+        shader.set_uniform_4f("u_color", r, 0.0f, 1.0f, 1.0f);
         vertex_array.bind();
         index_buffer.bind();
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
         
-        if(r > 1.0f)
+        if(r > 0.7f)
             increment = -0.01f;
         else if(r < 0.5f)
             increment = 0.01f;
@@ -82,7 +77,7 @@ int main(void)
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
-    glDeleteProgram(shader);
+    shader.~Shader();
     index_buffer.~Index_buffer();
     vertex_buffer.~Vertex_buffer();
     glfwTerminate();
