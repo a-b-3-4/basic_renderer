@@ -7,6 +7,8 @@
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <imgui/imgui.h>
+#include <imgui/imgui_impl_glfw_gl3.h>
 
 #include "shader.h"
 #include "vertex_buffer.h"
@@ -65,27 +67,50 @@ int main(void)
 
         glm::mat4 projection = glm::ortho(0.0f, 960.0f, 0.0f, 540.0f, -1.0f, 1.0f);
         glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0));
-        glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0));
-        glm::mat4 mvp = projection * view * model;
 
         Shader shader("../basic_renderer/shader/shader.vert", "../basic_renderer/shader/shader.frag");
         shader.bind();
-        shader.set_uniform_matrix_4f("u_MVP", mvp);
 
         Texture texture("../basic_renderer/res/textures/florian.png");
         texture.bind();
         shader.set_uniform_1i("u_texture", 0);
 
         Renderer renderer;
+
+        ImGui::CreateContext();
+        ImGui_ImplGlfwGL3_Init(window, true);
+        ImGui::StyleColorsDark();
+
+        glm::vec3 translation(0, 0, 0);
+
         while (!glfwWindowShouldClose(window))
         {
+            ImGui_ImplGlfwGL3_NewFrame();
+
             renderer.clear();
+            
+            glm::mat4 view = glm::translate(glm::mat4(1.0f), translation);
+            glm::mat4 mvp = projection * view * model;
+
+            shader.bind();
+            shader.set_uniform_matrix_4f("u_MVP", mvp);
+
             renderer.draw(vertex_array, index_buffer, shader);
+
+            {
+                ImGui::SliderFloat3("Translation", &translation.x, 0.0f, 960.0f);
+                ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+            }
+
+            ImGui::Render();
+            ImGui_ImplGlfwGL3_RenderDrawData(ImGui::GetDrawData());
 
             glfwSwapBuffers(window);
             glfwPollEvents();
         }
     }
+    ImGui_ImplGlfwGL3_Shutdown();
+    ImGui::DestroyContext();
     glfwTerminate();
     return 0;
 }
