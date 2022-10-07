@@ -23,7 +23,7 @@ int main(void)
         FATAL << "glfw didn't initionalize";
         return -1;
     }
-    window = glfwCreateWindow(640, 480, "basic renderer", NULL, NULL);
+    window = glfwCreateWindow(960, 540, "basic renderer", NULL, NULL);
     if (!window)
     {
         FATAL << "glfw failed to create a window";
@@ -40,10 +40,10 @@ int main(void)
     {
         float positions[] = 
         {
-            -0.5f,  0.5f, 0.0f, 1.0f,
-             0.5f,  0.5f, 1.0f, 1.0f,
-            -0.5f, -0.5f, 0.0f, 0.0f,
-             0.5f, -0.5f, 1.0f, 0.0f
+               0.0f,  300.0f, 0.0f, 1.0f,
+             300.0f,  300.0f, 1.0f, 1.0f,
+               0.0f,    0.0f, 0.0f, 0.0f,
+             300.0f,    0.0f, 1.0f, 0.0f
         };
         unsigned int indecies[6] =
         {
@@ -63,11 +63,14 @@ int main(void)
 
         Index_buffer index_buffer(indecies, 6);
 
-        glm::mat4 projection = glm::ortho(-2.0f, 2.0f, -1.5f, 1.5f, -1.0f, 1.0f);
+        glm::mat4 projection = glm::ortho(0.0f, 960.0f, 0.0f, 540.0f, -1.0f, 1.0f);
+        glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0));
+        glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0));
+        glm::mat4 mvp = projection * view * model;
 
         Shader shader("../basic_renderer/shader/shader.vert", "../basic_renderer/shader/shader.frag");
         shader.bind();
-        shader.set_uniform_matrix_4f("u_MVP", projection);
+        shader.set_uniform_matrix_4f("u_MVP", mvp);
 
         Texture texture("../basic_renderer/res/textures/florian.png");
         texture.bind();
