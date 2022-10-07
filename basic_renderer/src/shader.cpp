@@ -4,7 +4,7 @@
 #include <string>
 
 #include "shader.h"
-#include "log.h"
+#include "loga/log.h"
 
 Shader::Shader(const std::string& vertex_shader_filepath, const std::string& fragment_shader_filepath)
 {
@@ -91,6 +91,10 @@ void Shader::set_uniform_1f(const std::string& name, float value)
 void Shader::set_uniform_4f(const std::string& name, float v0, float v1, float v2, float v3)
 {
     glUniform4f(get_uniform_location(name), v0, v1, v2, v3);
+}
+void Shader::set_uniform_matrix_4f(const std::string& name, const glm::mat4& matrix)
+{
+    glUniformMatrix4fv(get_uniform_location(name), 1, GL_FALSE, &matrix[0][0]);
 }
 
 int Shader::get_uniform_location(const std::string& name)

@@ -3,8 +3,11 @@
 #include <GLFW/glfw3.h>
 #include <gl/glew.h>
 #include <iostream>
+#include <loga/log.h>
 
-#include "log.h"
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
 #include "shader.h"
 #include "vertex_buffer.h"
 #include "index_buffer.h"
@@ -16,10 +19,14 @@ int main(void)
 {
     GLFWwindow* window;
     if (!glfwInit())
+    {
+        FATAL << "glfw didn't initionalize";
         return -1;
+    }
     window = glfwCreateWindow(640, 480, "basic renderer", NULL, NULL);
     if (!window)
     {
+        FATAL << "glfw failed to create a window";
         glfwTerminate();
         return -1;
     }
@@ -30,63 +37,52 @@ int main(void)
         WARNING << "glew didn't initionalize";
     }
     INFO << "OpenGL version: " << glGetString(GL_VERSION);
-    float positions[] = 
     {
-        -1.0f,  1.0f, 0.0f, 1.0f,
-         1.0f,  1.0f, 1.0f, 1.0f,
-        -1.0f,  0.0f, 0.0f, 0.0f,
-         1.0f,  0.0f, 1.0f, 0.0f
-    };
-    unsigned int indecies[6] =
-    {
-        0, 1, 2,
-        1, 2, 3
-    };
+        float positions[] = 
+        {
+            -0.5f,  0.5f, 0.0f, 1.0f,
+             0.5f,  0.5f, 1.0f, 1.0f,
+            -0.5f, -0.5f, 0.0f, 0.0f,
+             0.5f, -0.5f, 1.0f, 0.0f
+        };
+        unsigned int indecies[6] =
+        {
+            0, 1, 2,
+            1, 2, 3
+        };
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        Vertex_array vertex_array;
+        Vertex_buffer vertex_buffer(positions, 4 * 4 * sizeof(float));
 
-    Vertex_array vertex_array;
-    Vertex_buffer vertex_buffer(positions, 4 * 4 * sizeof(float));
+        Vertex_buffer_layout vertex_buffer_layout;
+        vertex_buffer_layout.push<float>(2); //positions
+        vertex_buffer_layout.push<float>(2); //texture coordiantes
+        vertex_array.add_buffer(vertex_buffer, vertex_buffer_layout);
 
-    Vertex_buffer_layout vertex_buffer_layout;
-    vertex_buffer_layout.push<float>(2);
-    vertex_buffer_layout.push<float>(2);
-    vertex_array.add_buffer(vertex_buffer, vertex_buffer_layout);
-    
-    Index_buffer index_buffer(indecies, 6);
+        Index_buffer index_buffer(indecies, 6);
 
-    Shader shader("../basic_renderer/shader/shader.vert", "../basic_renderer/shader/shader.frag");
-    shader.bind();
-    shader.set_uniform_4f("u_color", 0.5f, 0.0f, 1.0f, 1.0f);
+        glm::mat4 projection = glm::ortho(-2.0f, 2.0f, -1.5f, 1.5f, -1.0f, 1.0f);
 
-    Texture texture("../basic_renderer/res/textures/florian.png");
-    texture.bind();
-    shader.set_uniform_1i("u_texture", 0);
-
-    Renderer renderer;
-    float r = 0.5f;
-    float increment = 0.01f;
-    while (!glfwWindowShouldClose(window))
-    {
-        renderer.clear();
+        Shader shader("../basic_renderer/shader/shader.vert", "../basic_renderer/shader/shader.frag");
         shader.bind();
-        shader.set_uniform_4f("u_color", r, 0.0f, 1.0f, 1.0f);
-        renderer.draw(vertex_array, index_buffer, shader);
-        
-        if(r > 0.7f)
-            increment = -0.01f;
-        else if(r < 0.5f)
-            increment = 0.01f;
-        r += increment;
+        shader.set_uniform_matrix_4f("u_MVP", projection);
 
-        glfwSwapBuffers(window);
-        glfwPollEvents();
+        Texture texture("../basic_renderer/res/textures/florian.png");
+        texture.bind();
+        shader.set_uniform_1i("u_texture", 0);
+
+        Renderer renderer;
+        while (!glfwWindowShouldClose(window))
+        {
+            renderer.clear();
+            renderer.draw(vertex_array, index_buffer, shader);
+
+            glfwSwapBuffers(window);
+            glfwPollEvents();
+        }
     }
-    texture.~Texture();
-    shader.~Shader();
-    index_buffer.~Index_buffer();
-    vertex_buffer.~Vertex_buffer();
     glfwTerminate();
     return 0;
 }
