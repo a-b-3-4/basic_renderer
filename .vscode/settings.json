@@ -45,7 +45,8 @@
         "fstream": "cpp",
         "string": "cpp",
         "vector": "cpp",
-        "sstream": "cpp"
+        "sstream": "cpp",
+        "functional": "cpp"
     },
     "mesonbuild.configureOnOpen": true
 }

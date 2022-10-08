@@ -1,5 +1,10 @@
 #pragma once
 
+#include <functional>
+#include <vector>
+
+#include "loga/log.h"
+
 namespace test
 {
     class Test
@@ -11,5 +16,24 @@ namespace test
         virtual void on_update(float delta_time) {}
         virtual void on_render() {}
         virtual void on_ImGui_render() {}
+    };
+
+    class Test_menu : public Test
+    {
+    public:
+        Test_menu(Test*& current_test_pointer);
+
+        void on_ImGui_render() override;
+
+        template<typename T>
+        void register_test(const std::string& name)
+        {
+            INFO << "registering test \"" << name << "\"";
+
+            m_tests.push_back(std::make_pair(name, []() {return new T(); }));
+        }
+    private:
+        Test*& m_current_test;
+        std::vector<std::pair<std::string, std::function<Test*()>>> m_tests;
     };
 }

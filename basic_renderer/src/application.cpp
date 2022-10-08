@@ -36,9 +36,7 @@ int main(void)
     glfwMakeContextCurrent(window);
     glfwSwapInterval(1);
     if(glewInit() != GLEW_OK)
-    {
         WARNING << "glew didn't initionalize";
-    }
     INFO << "OpenGL version: " << glGetString(GL_VERSION);
 
     {
@@ -51,25 +49,44 @@ int main(void)
         ImGui_ImplGlfwGL3_Init(window, true);
         ImGui::StyleColorsDark();
 
-        test::Test_clear_color test;
+        test::Test* current_test = nullptr;
+        test::Test_menu* test_menu = new test::Test_menu(current_test);
+        current_test = test_menu;
+
+        test_menu->register_test<test::Test_clear_color>("clear color");
 
         while (!glfwWindowShouldClose(window))
         {
+            glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
             renderer.clear();
 
-            test.on_update(0.0f);
-            test.on_render();
-
             ImGui_ImplGlfwGL3_NewFrame();
-            test.on_ImGui_render();
+
+            if(current_test)
+            {
+                current_test->on_update(0.0f);
+                current_test->on_render();
+                ImGui::Begin("Test");
+                if(current_test != test_menu && ImGui::Button("<-"))
+                {
+                    delete current_test;
+                    current_test = test_menu;
+                }
+                current_test->on_ImGui_render();
+                ImGui::End();
+            }
+
             ImGui::Render();
             ImGui_ImplGlfwGL3_RenderDrawData(ImGui::GetDrawData());
 
             glfwSwapBuffers(window);
             glfwPollEvents();
         }
+        delete current_test;
+        if(current_test != test_menu)
+            delete test_menu;
     }
-    
+
     ImGui_ImplGlfwGL3_Shutdown();
     ImGui::DestroyContext();
     glfwTerminate();
