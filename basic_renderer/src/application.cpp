@@ -19,6 +19,7 @@
 
 #include "tests/test_clear_color.h"
 #include "tests/test_textures_2d.h"
+#include "tests/test_batch_rendering.h"
 
 int main(void)
 {
@@ -57,6 +58,7 @@ int main(void)
 
         test_menu->register_test<test::Test_clear_color>("clear color");
         test_menu->register_test<test::Test_textures_2d>("2d textures");
+        test_menu->register_test<test::Test_batch_rendering>("batch rendering");
 
         while (!glfwWindowShouldClose(window))
         {

@@ -97,7 +97,7 @@ void Shader::set_uniform_matrix_4f(const std::string& name, const glm::mat4& mat
     glUniformMatrix4fv(get_uniform_location(name), 1, GL_FALSE, &matrix[0][0]);
 }
 
-int Shader::get_uniform_location(const std::string& name)
+int Shader::get_uniform_location(const std::string& name) const
 {
     if(_uniform_location_cache.find(name) != _uniform_location_cache.end())
         return _uniform_location_cache[name];

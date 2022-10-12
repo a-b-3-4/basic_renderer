@@ -39,7 +39,7 @@ namespace test
  
         _index_buffer = std::make_unique<Index_buffer>(indecies, 6);
 
-        _shader = std::make_unique<Shader>("../basic_renderer/shader/shader.vert", "../basic_renderer/shader/shader.frag");
+        _shader = std::make_unique<Shader>("../basic_renderer/shader/shader.vert.glsl", "../basic_renderer/shader/shader.frag.glsl");
         _shader->bind();
 
         _texture = std::make_unique<Texture>("../basic_renderer/res/textures/florian.png");
