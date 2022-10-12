@@ -8,12 +8,12 @@
 
 Shader::Shader(const std::string& vertex_shader_filepath, const std::string& fragment_shader_filepath)
 {
-    m_renderer_id = create_shader(vertex_shader_filepath, fragment_shader_filepath);
+    _renderer_id = create_shader(vertex_shader_filepath, fragment_shader_filepath);
 }
 
 Shader::~Shader()
 {
-    glDeleteProgram(m_renderer_id);
+    glDeleteProgram(_renderer_id);
 }
 
 
@@ -71,7 +71,7 @@ unsigned int Shader::create_shader(const std::string& vertex_shader_filepath, co
 
 void Shader::bind() const
 {
-    glUseProgram(m_renderer_id);
+    glUseProgram(_renderer_id);
 }
 
 void Shader::unbind() const
@@ -99,11 +99,11 @@ void Shader::set_uniform_matrix_4f(const std::string& name, const glm::mat4& mat
 
 int Shader::get_uniform_location(const std::string& name)
 {
-    if(m_uniform_location_cache.find(name) != m_uniform_location_cache.end())
-        return m_uniform_location_cache[name];
-    int location = glGetUniformLocation(m_renderer_id, name.c_str());
+    if(_uniform_location_cache.find(name) != _uniform_location_cache.end())
+        return _uniform_location_cache[name];
+    int location = glGetUniformLocation(_renderer_id, name.c_str());
     if(location == -1)
         WARNING << "uniform \"" << name << "\" doesn't exist!";
-    m_uniform_location_cache[name] = location;
+    _uniform_location_cache[name] = location;
     return location;
 }

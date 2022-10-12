@@ -6,9 +6,6 @@
 
 class Shader
 {
-private:
-    unsigned int m_renderer_id;
-    std::unordered_map<std::string, int> m_uniform_location_cache;
 public:
     Shader(const std::string& vertex_shader_filepath, const std::string& fragment_shader_filepath);
     ~Shader();
@@ -26,4 +23,7 @@ private:
     unsigned int compile_shader(unsigned int type, const std::string& source);
     unsigned int create_shader(const std::string& vertex_shader_filepath, const std::string& fragment_shader_filepath);
     int get_uniform_location(const std::string& name);
+private:
+    unsigned int _renderer_id;
+    std::unordered_map<std::string, int> _uniform_location_cache;
 };

@@ -6,7 +6,7 @@
 namespace test
 {
     Test_clear_color::Test_clear_color()
-    : m_clear_color{ 0.5f, 0.0f, 1.0f, 1.0f }
+    : _clear_color{ 0.5f, 0.0f, 1.0f, 1.0f }
     {
 
     }
@@ -24,12 +24,12 @@ namespace test
 
     void Test_clear_color::on_render()
     {
-        glClearColor(m_clear_color[0], m_clear_color[1], m_clear_color[2], m_clear_color[3]);
+        glClearColor(_clear_color[0], _clear_color[1], _clear_color[2], _clear_color[3]);
         glClear(GL_COLOR_BUFFER_BIT);
     }
     
     void Test_clear_color::on_ImGui_render()
     {
-        ImGui::ColorEdit4("clear color", m_clear_color);
+        ImGui::ColorEdit4("clear color", _clear_color);
     }
 }

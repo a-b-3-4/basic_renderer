@@ -30,10 +30,10 @@ namespace test
         {
             INFO << "registering test \"" << name << "\"";
 
-            m_tests.push_back(std::make_pair(name, []() {return new T(); }));
+            _tests.push_back(std::make_pair(name, []() {return new T(); }));
         }
     private:
-        Test*& m_current_test;
-        std::vector<std::pair<std::string, std::function<Test*()>>> m_tests;
+        Test*& _current_test;
+        std::vector<std::pair<std::string, std::function<Test*()>>> _tests;
     };
 }

@@ -14,6 +14,6 @@ namespace test
         void on_render() override;
         void on_ImGui_render() override;
     private:
-        float m_clear_color[4];
+        float _clear_color[4];
     };
 }

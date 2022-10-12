@@ -16,7 +16,9 @@
 #include "vertex_array.h"
 #include "renderer.h"
 #include "texture.h"
+
 #include "tests/test_clear_color.h"
+#include "tests/test_textures_2d.h"
 
 int main(void)
 {
@@ -54,6 +56,7 @@ int main(void)
         current_test = test_menu;
 
         test_menu->register_test<test::Test_clear_color>("clear color");
+        test_menu->register_test<test::Test_textures_2d>("2d textures");
 
         while (!glfwWindowShouldClose(window))
         {

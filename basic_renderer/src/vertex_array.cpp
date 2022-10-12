@@ -4,15 +4,15 @@
 
 Vertex_array::Vertex_array()
 {
-    glGenVertexArrays(1, &m_renderer_id);
+    glGenVertexArrays(1, &_renderer_id);
 }
 Vertex_array::~Vertex_array()
 {
-    glDeleteVertexArrays(1, &m_renderer_id);
+    glDeleteVertexArrays(1, &_renderer_id);
 }
 void Vertex_array::bind() const
 {
-    glBindVertexArray(m_renderer_id);
+    glBindVertexArray(_renderer_id);
 }
 void Vertex_array::unbind() const
 {

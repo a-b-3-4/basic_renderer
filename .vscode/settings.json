@@ -46,7 +46,18 @@
         "string": "cpp",
         "vector": "cpp",
         "sstream": "cpp",
-        "functional": "cpp"
+        "functional": "cpp",
+        "algorithm": "cpp",
+        "cstdarg": "cpp",
+        "iomanip": "cpp",
+        "list": "cpp",
+        "locale": "cpp",
+        "unordered_map": "cpp",
+        "xhash": "cpp",
+        "xlocbuf": "cpp",
+        "xlocmes": "cpp",
+        "xlocmon": "cpp",
+        "xloctime": "cpp"
     },
     "mesonbuild.configureOnOpen": true
 }

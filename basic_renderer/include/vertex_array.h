@@ -5,8 +5,6 @@
 
 class Vertex_array
 {
-private:
-    unsigned int m_renderer_id;
 public:
     Vertex_array();
     ~Vertex_array();
@@ -15,4 +13,6 @@ public:
 
     void bind() const;
     void unbind() const;
+private:
+    unsigned int _renderer_id;
 };
