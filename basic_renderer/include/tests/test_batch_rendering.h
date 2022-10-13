@@ -25,6 +25,7 @@ namespace test
         std::unique_ptr<Vertex_buffer> _vertex_buffer;
         std::unique_ptr<Index_buffer> _index_buffer;
         std::unique_ptr<Shader> _shader;
-        std::unique_ptr<Texture> _texture;
+        std::unique_ptr<Texture> _texture_a;
+        std::unique_ptr<Texture> _texture_b;
     };
 }

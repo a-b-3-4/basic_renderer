@@ -42,7 +42,7 @@ namespace test
         _shader = std::make_unique<Shader>("../basic_renderer/shader/shader.vert.glsl", "../basic_renderer/shader/shader.frag.glsl");
         _shader->bind();
 
-        _texture = std::make_unique<Texture>("../basic_renderer/res/textures/florian.png");
+        _texture = std::make_unique<Texture>("../basic_renderer/res/textures/sample_texture_3.png");
         _shader->set_uniform_1i("u_texture", 0);
     }
     

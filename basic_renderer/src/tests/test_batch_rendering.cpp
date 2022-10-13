@@ -13,26 +13,31 @@ namespace test
     {
         _shader = std::make_unique<Shader>("../basic_renderer/shader/test_batch_rendering/shader.vert.glsl", "../basic_renderer/shader/test_batch_rendering/shader.frag.glsl");
 
-        glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+        int samplers[2] = { 0, 1 };
+        _shader->bind();
+        _shader->set_uniform_1iv("u_textures", 2, samplers);
 
         float positions[] = 
         {
-            -1.5f, -0.5f, 0.0f,
-            -0.5f, -0.5f, 0.0f,
-            -0.5f,  0.5f, 0.0f,
-            -1.5f,  0.5f, 0.0f,
-
-             0.5f, -0.5f, 0.0f,
-             1.5f, -0.5f, 0.0f,
-             1.5f,  0.5f, 0.0f,
-             0.5f,  0.5f, 0.0f
+            -1.5f, -0.5f, 0.0f,  0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f,
+            -0.5f, -0.5f, 0.0f,  0.5f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+            -0.5f,  0.5f, 0.0f,  0.5f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+            -1.5f,  0.5f, 0.0f,  0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 0.0f,
+ 
+             0.5f, -0.5f, 0.0f,  0.35f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+             1.5f, -0.5f, 0.0f,  0.35f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+             1.5f,  0.5f, 0.0f,  0.35f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+             0.5f,  0.5f, 0.0f,  0.35f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f
         };
         _vertex_array = std::make_unique<Vertex_array>();
         
         _vertex_buffer = std::make_unique<Vertex_buffer>(positions, sizeof(positions));
 
         Vertex_buffer_layout vertex_buffer_layout;
-        vertex_buffer_layout.push<float>(3); //positions
+        vertex_buffer_layout.push<float>(3); //position
+        vertex_buffer_layout.push<float>(4); //color
+        vertex_buffer_layout.push<float>(2); //texture coordiante
+        vertex_buffer_layout.push<float>(1); //texture index
         _vertex_array->add_buffer(*_vertex_buffer, vertex_buffer_layout);
  
         unsigned int indecies[] =
@@ -44,6 +49,11 @@ namespace test
             6, 7, 4
         };
         _index_buffer = std::make_unique<Index_buffer>(indecies, sizeof(indecies)/sizeof(unsigned int));
+
+        _texture_a = std::make_unique<Texture>("../basic_renderer/res/textures/sample_texture_1.png");
+        _texture_b = std::make_unique<Texture>("../basic_renderer/res/textures/sample_texture_2.png");
+        _texture_a->bind(0);
+        _texture_b->bind(1);
     }
     
     Test_batch_rendering::~Test_batch_rendering()
