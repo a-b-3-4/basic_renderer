@@ -10,5 +10,5 @@ class Renderer
 {
 public:
     void clear() const;
-    void draw(const Vertex_array& vertex_array, const Index_buffer& index_buffer, const Shader& shader) const;
+    void draw(const Vertex_array& vertex_array, const Index_buffer& index_buffer, const Shader& shader, uint32_t index_count) const;
 };

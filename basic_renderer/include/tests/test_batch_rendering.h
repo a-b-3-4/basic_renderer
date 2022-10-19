@@ -27,5 +27,8 @@ namespace test
         std::unique_ptr<Shader> _shader;
         std::unique_ptr<Texture> _texture_a;
         std::unique_ptr<Texture> _texture_b;
+        float _quad_1_position[2] = { -1.5f, -0.5f};
+        float _quad_2_position[2] = { -1.5f,  0.5f};
+        float _size[2] = { 1.0f, 1.0f};
     };
 }

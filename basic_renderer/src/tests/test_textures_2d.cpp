@@ -42,7 +42,7 @@ namespace test
         _shader = std::make_unique<Shader>("../basic_renderer/shader/shader.vert.glsl", "../basic_renderer/shader/shader.frag.glsl");
         _shader->bind();
 
-        _texture = std::make_unique<Texture>("../basic_renderer/res/textures/sample_texture_3.png");
+        _texture = std::make_unique<Texture>("../basic_renderer/resources/textures/sample_texture_3.png");
         _shader->set_uniform_1i("u_texture", 0);
     }
     
@@ -71,14 +71,14 @@ namespace test
             glm::mat4 mvp = _projection * _view * model;
             _shader->bind();
             _shader->set_uniform_matrix_4f("u_MVP", mvp);
-            renderer.draw(*_vertex_array, *_index_buffer, *_shader);
+            renderer.draw(*_vertex_array, *_index_buffer, *_shader, 6);
         }
         {
             glm::mat4 model = glm::translate(glm::mat4(1.0f), _translation_b);
             glm::mat4 mvp = _projection * _view * model;
             _shader->bind();
             _shader->set_uniform_matrix_4f("u_MVP", mvp);
-            renderer.draw(*_vertex_array, *_index_buffer, *_shader);
+            renderer.draw(*_vertex_array, *_index_buffer, *_shader, 6);
         }
     }
     
