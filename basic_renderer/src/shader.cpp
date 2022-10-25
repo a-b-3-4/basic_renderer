@@ -1,7 +1,6 @@
 #include <gl/glew.h>
-#include <iostream>
 #include <fstream>
-#include <string>
+#include <glm/gtc/type_ptr.hpp>
 
 #include "shader.h"
 #include "loga/log.h"
@@ -94,7 +93,7 @@ void Shader::set_uniform_4f(const std::string& name, float v0, float v1, float v
 }
 void Shader::set_uniform_matrix_4f(const std::string& name, const glm::mat4& matrix)
 {
-    glUniformMatrix4fv(get_uniform_location(name), 1, GL_FALSE, &matrix[0][0]);
+    glUniformMatrix4fv(get_uniform_location(name), 1, GL_FALSE, glm::value_ptr(matrix));
 }
 void Shader::set_uniform_1iv(const std::string& name, int count, const int *value)
 {

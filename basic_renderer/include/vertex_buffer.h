@@ -3,6 +3,7 @@
 class Vertex_buffer
 {
 public:
+    Vertex_buffer(unsigned int size);
     Vertex_buffer(const void* data, unsigned int size);
     ~Vertex_buffer();
 

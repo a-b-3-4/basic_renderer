@@ -2,6 +2,12 @@
 
 #include "vertex_buffer.h"
 
+Vertex_buffer::Vertex_buffer(unsigned int size)
+{
+    glGenBuffers(1, &_renderer_id);
+    glBindBuffer(GL_ARRAY_BUFFER, _renderer_id);
+    glBufferData(GL_ARRAY_BUFFER, size, nullptr, GL_DYNAMIC_DRAW);
+}
 Vertex_buffer::Vertex_buffer(const void* data, unsigned int size)
 {
     glGenBuffers(1, &_renderer_id);

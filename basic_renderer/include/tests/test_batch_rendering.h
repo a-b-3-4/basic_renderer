@@ -1,11 +1,7 @@
 #pragma once
 
-#include <memory>
-
 #include "tests/test.h"
 
-#include "vertex_array.h"
-#include "index_buffer.h"
 #include "shader.h"
 #include "texture.h"
 
@@ -21,14 +17,10 @@ namespace test
         void on_render() override;
         void on_ImGui_render() override;
     private:
-        std::unique_ptr<Vertex_array> _vertex_array;
-        std::unique_ptr<Vertex_buffer> _vertex_buffer;
-        std::unique_ptr<Index_buffer> _index_buffer;
         std::unique_ptr<Shader> _shader;
-        std::unique_ptr<Texture> _texture_a;
-        std::unique_ptr<Texture> _texture_b;
-        float _quad_1_position[2] = { -1.5f, -0.5f};
-        float _quad_2_position[2] = { -1.5f,  0.5f};
-        float _size[2] = { 1.0f, 1.0f};
+
+        std::unique_ptr<Texture> _sample_texture_1;
+        std::unique_ptr<Texture> _sample_texture_2;
+        glm::vec2 _quad_position = { -1.5f, -0.5f };
     };
 }
