@@ -1,4 +1,5 @@
 #include <loga/log.h>
+#include <gl/glew.h>
 
 #include <array>
 
@@ -10,7 +11,7 @@
 static const size_t max_quad_count = 10000;
 static const size_t max_vertex_count = max_quad_count * 4;
 static const size_t max_index_count = max_quad_count * 6;
-static const size_t max_textures = 32; //TODO: get this information from driver
+static const size_t max_textures = 32 /*GL_MAX_TEXTURE_IMAGE_UNITS*/; //TODO: get this information from driver
 
 struct Vertex
 {
@@ -36,7 +37,9 @@ struct Renderer_data
     std::array<Texture*, max_textures> texture_slots;
     /*NOTE: dear future me, please forgive me, if you are reading this, trying to find out why things are breaking.
     i would guess the reason is, that we are setting every texture* in the array to point at the texture in input at the Renderer::draw_quad() funktion. this means (i think), that when you destroy the original texture, the
-    pointer in the array will point at random memory, which should mess things up pretty badly. but hey, it's just a guess!*/
+    pointer in the array will point at random memory, which should mess things up pretty badly. but hey, it's just a guess!
+    
+    fyi: there might be some memory leaks here, but i have no idea how they work, so i'll assume there arn't any, till that time comes*/
     uint32_t texture_slot_index = 1;
 
     Renderer::Statistics renderer_statistics;

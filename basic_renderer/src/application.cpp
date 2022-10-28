@@ -8,6 +8,7 @@
 
 #include "tests/test_clear_color.h"
 #include "tests/test_batch_rendering.h"
+#include "tests/test_pong.h"
 
 int main(void)
 {
@@ -43,6 +44,7 @@ int main(void)
         current_test = test_menu;
 
         test_menu->register_test<test::Test_clear_color>("clear color");
+        test_menu->register_test<test::Test_pong>("pong");
         test_menu->register_test<test::Test_batch_rendering>("batch rendering");
 
         while (!glfwWindowShouldClose(window))
